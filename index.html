@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#05070d" />
+  <title>Realms Cinematic Universe</title>
+  <style>
+    :root {
+      --bg: #05070d;
+      --bg-2: #0a0f1d;
+      --panel: rgba(15, 23, 42, 0.72);
+      --panel-strong: rgba(11, 17, 30, 0.94);
+      --text: #f7f9ff;
+      --muted: #aab4c8;
+      --line: rgba(255,255,255,.11);
+      --accent: #6aa9ff;
+      --accent-2: #9f7cff;
+      --glow: rgba(106,169,255,.28);
+      --success: #8ef0bd;
+      --warning: #ffd37a;
+      --max: 1180px;
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 15%, rgba(49, 94, 190, .18), transparent 32%),
+        radial-gradient(circle at 85% 10%, rgba(121, 72, 180, .13), transparent 30%),
+        linear-gradient(180deg, #04060b 0%, #080d18 50%, #05070d 100%);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      opacity: .7;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1.4px),
+        radial-gradient(circle, rgba(130,180,255,.55) 1px, transparent 1.4px);
+      background-size: 52px 52px, 87px 87px;
+      background-position: 0 0, 22px 31px;
+      mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.45) 55%, transparent 100%);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      background: rgba(4, 6, 11, .74);
+    }
+
+    .nav {
+      max-width: var(--max);
+      margin: auto;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #05101e;
+      box-shadow: 0 0 30px var(--glow);
+      font-weight: 1000;
+    }
+
+    .navlinks {
+      display: flex;
+      gap: 18px;
+      color: var(--muted);
+      font-size: .93rem;
+      font-weight: 700;
+    }
+
+    .navlinks a:hover { color: var(--text); }
+
+    main { overflow: hidden; }
+
+    .hero {
+      max-width: var(--max);
+      margin: auto;
+      padding: 95px 22px 70px;
+      min-height: 78vh;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 52px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #c9dcff;
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: 9px 12px;
+      border: 1px solid rgba(120,170,255,.24);
+      border-radius: 999px;
+      background: rgba(70, 110, 190, .09);
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(3.2rem, 8vw, 7.2rem);
+      line-height: .88;
+      margin: 22px 0 18px;
+      letter-spacing: -.065em;
+      text-transform: uppercase;
+    }
+
+    .gradient {
+      background: linear-gradient(100deg, #ffffff 20%, #a4c6ff 60%, #bca4ff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.7;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      border: 1px solid var(--line);
+      padding: 13px 18px;
+      border-radius: 12px;
+      font-weight: 850;
+      transition: .2s ease;
+      background: rgba(255,255,255,.04);
+    }
+
+    .button.primary {
+      color: #08101d;
+      border-color: transparent;
+      background: linear-gradient(135deg, #a9ccff, #a993ff);
+      box-shadow: 0 12px 40px rgba(91, 126, 218, .18);
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .hero-card {
+      position: relative;
+      min-height: 440px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 30px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(118,92,255,.28), transparent 28%),
+        radial-gradient(circle at 20% 70%, rgba(60,130,255,.28), transparent 32%),
+        linear-gradient(145deg, #0b1223, #090b12);
+      box-shadow: 0 30px 90px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.07);
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(115deg, transparent 28%, rgba(255,255,255,.05) 29%, transparent 30%),
+        linear-gradient(65deg, transparent 62%, rgba(255,255,255,.04) 63%, transparent 64%);
+      background-size: 100px 100px;
+    }
+
+    .hero-card-content {
+      position: absolute;
+      inset: 0;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(to top, rgba(3,5,10,.96) 0%, rgba(3,5,10,.15) 60%, transparent 100%);
+    }
+
+    .project-label {
+      font-size: .78rem;
+      letter-spacing: .19em;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #b6c8eb;
+    }
+
+    .hero-card h2 {
+      margin: 9px 0 10px;
+      font-size: clamp(2.2rem, 5vw, 4.3rem);
+      line-height: .95;
+      text-transform: uppercase;
+      letter-spacing: -.045em;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .time {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 13px 8px;
+      text-align: center;
+      background: rgba(255,255,255,.045);
+    }
+
+    .time strong {
+      display: block;
+      font-size: 1.5rem;
+      letter-spacing: -.03em;
+    }
+
+    .time span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .64rem;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .release-note {
+      margin-top: 11px;
+      color: #c7d4ec;
+      font-size: .82rem;
+    }
+
+    section {
+      max-width: var(--max);
+      margin: auto;
+      padding: 82px 22px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 28px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      letter-spacing: -.045em;
+      text-transform: uppercase;
+    }
+
+    .section-title p {
+      max-width: 470px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--panel);
+      box-shadow: 0 20px 45px rgba(0,0,0,.15);
+    }
+
+    .poster {
+      height: 250px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        radial-gradient(circle at 75% 22%, rgba(137,91,255,.26), transparent 25%),
+        radial-gradient(circle at 25% 72%, rgba(74,145,255,.24), transparent 33%),
+        linear-gradient(160deg, #131d34, #090d16);
+    }
+
+    .poster.alt {
+      background:
+        radial-gradient(circle at 25% 25%, rgba(255,105,105,.16), transparent 27%),
+        radial-gradient(circle at 78% 70%, rgba(106,169,255,.24), transparent 29%),
+        linear-gradient(160deg, #151523, #080b12);
+    }
+
+    .poster.dark {
+      background:
+        radial-gradient(circle at 70% 28%, rgba(255,197,92,.12), transparent 25%),
+        linear-gradient(160deg, #171312, #07090e);
+    }
+
+    .poster h3 {
+      margin: auto 0 0;
+      font-size: 2rem;
+      text-transform: uppercase;
+      letter-spacing: -.04em;
+      line-height: .95;
+    }
+
+    .badge {
+      align-self: flex-start;
+      padding: 7px 9px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      font-weight: 900;
+      color: #d8e4fb;
+      background: rgba(0,0,0,.22);
+    }
+
+    .card-body { padding: 18px; }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .mini-countdown {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: #d9e5fb;
+      font-weight: 800;
+      font-size: .9rem;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: linear-gradient(var(--accent), var(--accent-2));
+      opacity: .55;
+    }
+
+    .event {
+      position: relative;
+      margin-left: 50px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .event::before {
+      content: "";
+      position: absolute;
+      left: -39px;
+      top: 24px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(106,169,255,.11), 0 0 22px var(--glow);
+    }
+
+    .event small {
+      color: #9db7e4;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .event h3 {
+      margin: 6px 0;
+      font-size: 1.25rem;
+    }
+
+    .event p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .characters {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .character {
+      min-height: 190px;
+      padding: 17px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(to top, rgba(4,6,11,.95), rgba(4,6,11,.15)),
+        radial-gradient(circle at 50% 30%, rgba(87,131,214,.32), transparent 42%),
+        #0d1321;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+    }
+
+    .character strong {
+      font-size: 1.05rem;
+    }
+
+    .character span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .cta {
+      margin-top: 24px;
+      padding: 34px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 15% 50%, rgba(88,148,255,.19), transparent 25%),
+        radial-gradient(circle at 85% 50%, rgba(151,103,255,.18), transparent 28%),
+        rgba(255,255,255,.035);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .cta h3 {
+      margin: 0 0 8px;
+      font-size: 1.7rem;
+    }
+
+    .cta p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      margin-top: 40px;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: auto;
+      padding: 30px 22px 42px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 70px; }
+      .hero-card { min-height: 400px; }
+      .project-grid { grid-template-columns: 1fr 1fr; }
+      .characters { grid-template-columns: repeat(3, 1fr); }
+      .section-title { align-items: start; flex-direction: column; }
+    }
+
+    @media (max-width: 640px) {
+      .navlinks { display: none; }
+      .hero { min-height: auto; padding-top: 56px; }
+      .hero-card { min-height: 365px; }
+      .project-grid { grid-template-columns: 1fr; }
+      .characters { grid-template-columns: 1fr 1fr; }
+      .countdown { gap: 6px; }
+      .time { padding: 10px 5px; }
+      .time strong { font-size: 1.25rem; }
+      .cta { align-items: stretch; flex-direction: column; }
+      .footer-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <header>
+    <nav class="nav">
+      <a class="brand" href="#top">
+        <div class="logo-mark">R</div>
+        <span>RCU</span>
+      </a>
+
+      <div class="navlinks">
+        <a href="#projects">Projects</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#characters">Characters</a>
+        <a href="#watch">Watch</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Realms Cinematic Universe</div>
+        <h1><span class="gradient">Every Realm.</span><br>One Universe.</h1>
+        <p>
+          Explore the projects, characters, history, and future of the Realms Cinematic Universe.
+          Follow the timeline and see what is coming next.
+        </p>
+
+        <div class="buttons">
+          <a class="button primary" href="#projects">Explore Projects</a>
+          <a class="button" href="#timeline">View Timeline</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-content">
+          <div class="project-label">Next in the RCU</div>
+          <h2>Realms I</h2>
+          <div class="countdown" id="mainCountdown">
+            <div class="time"><strong id="days">--</strong><span>Days</span></div>
+            <div class="time"><strong id="hours">--</strong><span>Hours</span></div>
+            <div class="time"><strong id="minutes">--</strong><span>Minutes</span></div>
+            <div class="time"><strong id="seconds">--</strong><span>Seconds</span></div>
+          </div>
+          <div class="release-note" id="releaseNote">Release date to be announced.</div>
+        </div>
+      </div>
+    </div>
+
+    <section id="projects">
+      <div class="section-title">
+        <div>
+          <div class="project-label">Coming Soon</div>
+          <h2>Upcoming Projects</h2>
+        </div>
+        <p>The currently announced RCU projects. Add exact release dates as they are revealed.</p>
+      </div>
+
+      <div class="project-grid">
+        <article class="card">
+          <div class="poster">
+            <span class="badge">Next Release</span>
+            <h3>Realms I</h3>
+          </div>
+          <div class="card-body">
+            <div class="meta"><span>RCU Project</span><span id="realms1Status">Coming Soon</span></div>
+            <div class="mini-countdown" id="realms1Mini">Release date TBD</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="poster alt">
+            <span class="badge">Announced</span>
+            <h3>Shadow Protocol</h3>
+          </div>
+          <div class="card-body">
+            <div class="meta"><span>RCU Project</span><span>Coming Soon</span></div>
+            <div class="mini-countdown">Release date TBD</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="poster dark">
+            <span class="badge">Announced</span>
+            <h3>Realms II:<br>Realmfall</h3>
+          </div>
+          <div class="card-body">
+            <div class="meta"><span>RCU Project</span><span>Coming Soon</span></div>
+            <div class="mini-countdown">Release date TBD</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="timeline">
+      <div class="section-title">
+        <div>
+          <div class="project-label">The Story So Far</div>
+          <h2>RCU Timeline</h2>
+        </div>
+        <p>This section is for the in-universe chronological order, separate from real-world project release dates.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="event">
+          <small>Early Era</small>
+          <h3>The First Realm War</h3>
+          <p>A major event in the history of the Realms. Replace this text with the official canon description.</p>
+        </div>
+
+        <div class="event">
+          <small>Project Era</small>
+          <h3>Realms I</h3>
+          <p>The beginning of the main RCU story. Add a spoiler-free synopsis here.</p>
+        </div>
+
+        <div class="event">
+          <small>Next Chapter</small>
+          <h3>Shadow Protocol</h3>
+          <p>Shadow Protocol takes place before Division Zero in the RCU chronology.</p>
+        </div>
+
+        <div class="event">
+          <small>Later</small>
+          <h3>Division Zero</h3>
+          <p>Add the official canon description and exact placement here when you are ready to reveal it.</p>
+        </div>
+
+        <div class="event">
+          <small>Announced</small>
+          <h3>Realms II: Realmfall</h3>
+          <p>The next announced Realms chapter. Add its official spoiler-free timeline description here.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="characters">
+      <div class="section-title">
+        <div>
+          <div class="project-label">Across the Realms</div>
+          <h2>Characters</h2>
+        </div>
+        <p>These can later become clickable character pages with appearances, affiliations, powers, quotes, and galleries.</p>
+      </div>
+
+      <div class="characters">
+        <div class="character"><strong>Ben</strong><span>Character profile coming soon</span></div>
+        <div class="character"><strong>Max</strong><span>Character profile coming soon</span></div>
+        <div class="character"><strong>Jack Walker</strong><span>Character profile coming soon</span></div>
+        <div class="character"><strong>Marcus Cole</strong><span>Character profile coming soon</span></div>
+        <div class="character"><strong>Rikon Vale</strong><span>Character profile coming soon</span></div>
+      </div>
+    </section>
+
+    <section id="watch">
+      <div class="section-title">
+        <div>
+          <div class="project-label">RCU Library</div>
+          <h2>Watch</h2>
+        </div>
+        <p>When your projects are uploaded, replace the placeholder button with your YouTube playlist or individual project links.</p>
+      </div>
+
+      <div class="cta">
+        <div>
+          <h3>The RCU watch order is coming.</h3>
+          <p>Released projects can appear here in either release order or chronological order.</p>
+        </div>
+        <a class="button primary" href="#projects">See Projects</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© <span id="year"></span> Realms Cinematic Universe</span>
+      <span>RCU Official Website</span>
+    </div>
+  </footer>
+
+  <script>
+    /*
+      ==========================================================
+      RCU COUNTDOWN SETTINGS
+      ==========================================================
+
+      Put the Realms I release date below.
+
+      Example:
+      const REALMS_1_RELEASE = "2026-09-25T18:00:00-04:00";
+
+      The format is:
+      YEAR-MONTH-DAY T HOUR:MINUTE:SECOND TIMEZONE
+
+      If you don't know the release date yet, leave it as null.
+    */
+
+    const REALMS_1_RELEASE = null;
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const releaseNote = document.getElementById("releaseNote");
+    const realms1Mini = document.getElementById("realms1Mini");
+    const realms1Status = document.getElementById("realms1Status");
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function updateCountdown() {
+      if (!REALMS_1_RELEASE) {
+        daysEl.textContent = "--";
+        hoursEl.textContent = "--";
+        minutesEl.textContent = "--";
+        secondsEl.textContent = "--";
+        releaseNote.textContent = "Release date to be announced.";
+        realms1Mini.textContent = "Release date TBD";
+        return;
+      }
+
+      const target = new Date(REALMS_1_RELEASE).getTime();
+      const now = Date.now();
+      const distance = target - now;
+
+      if (distance <= 0) {
+        daysEl.textContent = "00";
+        hoursEl.textContent = "00";
+        minutesEl.textContent = "00";
+        secondsEl.textContent = "00";
+        releaseNote.textContent = "REALMS I — OUT NOW";
+        realms1Mini.textContent = "OUT NOW";
+        realms1Status.textContent = "Released";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      daysEl.textContent = pad(days);
+      hoursEl.textContent = pad(hours);
+      minutesEl.textContent = pad(minutes);
+      secondsEl.textContent = pad(seconds);
+
+      const formattedDate = new Date(REALMS_1_RELEASE).toLocaleString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+
+      releaseNote.textContent = "Releases " + formattedDate;
+      realms1Mini.textContent = `${days}d ${hours}h ${minutes}m remaining`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
